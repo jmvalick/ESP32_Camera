@@ -1,11 +1,10 @@
 #include "logs_demo.h"
 
-#include <stdio.h>
-
 #include "esp_log.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
 
 // tests logs
 void log_demo(void)
