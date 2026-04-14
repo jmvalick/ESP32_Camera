@@ -27,6 +27,10 @@
 static const char *TAG = "example";
 static const char *payload = "Message from ESP32 ";
 
+#include "driver/gpio.h"
+static const gpio_num_t red_led = GPIO_NUM_1;
+static const gpio_num_t green_led = GPIO_NUM_2;
+
 
 void tcp_demo(void)
 {
@@ -34,6 +38,16 @@ void tcp_demo(void)
     char host_ip[] = HOST_IP_ADDR;
     int addr_family = 0;
     int ip_protocol = 0;
+
+    gpio_reset_pin(red_led);
+    gpio_set_direction(red_led, GPIO_MODE_OUTPUT);
+    bool red_led_state = 0;
+    gpio_set_level(red_led, red_led_state);
+    
+    gpio_reset_pin(green_led);
+    gpio_set_direction(green_led, GPIO_MODE_OUTPUT);
+    bool green_led_state = 0;
+    gpio_set_level(green_led, green_led_state);
 
     while (1) {
 #if defined(CONFIG_EXAMPLE_IPV4)
@@ -63,11 +77,11 @@ void tcp_demo(void)
         ESP_LOGI(TAG, "Successfully connected");
 
         while (1) {
-            int err = send(sock, payload, strlen(payload), 0);
-            if (err < 0) {
-                ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
-                break;
-            }
+            // int err = send(sock, payload, strlen(payload), 0);
+            // if (err < 0) {
+            //     ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+            //     break;
+            // }
 
             int len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
             // Error occurred during receiving
@@ -80,6 +94,15 @@ void tcp_demo(void)
                 rx_buffer[len] = 0; // Null-terminate whatever we received and treat like a string
                 ESP_LOGI(TAG, "Received %d bytes from %s:", len, host_ip);
                 ESP_LOGI(TAG, "%s", rx_buffer);
+
+                if (strcmp(rx_buffer, "1") == 0) {
+                    red_led_state = !red_led_state;
+                    gpio_set_level(red_led, red_led_state);
+                }
+                else if (strcmp(rx_buffer, "2") == 0) {
+                    green_led_state = !green_led_state;
+                    gpio_set_level(green_led, green_led_state);
+                }
             }
         }
 
