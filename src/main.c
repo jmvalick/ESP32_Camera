@@ -2,13 +2,18 @@
 
 #include "logs_demo.h"
 #include "blink_demo.h"
-#include "i2c_demo.h"
-#include "wifi_demo.h"
-#include "tcp_demo.h"
+#include "wifi.h"
+#include "tcp.h"
+#include "take_picture.h"
+
+#include "esp_heap_caps.h"
+#include "esp_log.h"
 
 
 void app_main(void) 
 {
-    wifi_demo();
-    tcp_demo();
+    log_demo();
+    //wifi_connect();
+    //tcp_connect();
+    take_picture();
 }
