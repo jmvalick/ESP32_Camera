@@ -4,10 +4,8 @@
 #include "blink_demo.h"
 #include "wifi.h"
 #include "tcp.h"
+#include "sdspi.h"
 #include "take_picture.h"
-
-#include "esp_heap_caps.h"
-#include "esp_log.h"
 
 
 void app_main(void) 
